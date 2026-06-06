@@ -10,15 +10,15 @@ const signatureDishes = [
     price: "₹595",
     category: "Howzatt Main Course",
     description: "Our legendary chef-special goat meat. Slow-simmered in a sealed earthen clay pot with organic garlic bulbs and a customized blend of rustic spices.",
-    image: "/stadium_lounge_bg.png",
+    image: "/images/mutton_handi.png",
     tag: "Most Ordered"
   },
   {
     name: "Murgh Malai Tikka",
     price: "₹390",
     category: "Clay Oven Tandoor",
-    description: "Mouth-melting boneless chicken chunks marinated overnight in heavy dairy cream, cheese, green cardamon dust, and roasted cashew paste.",
-    image: "/stadium_lounge_bg.png",
+    description: "Mouth-melting boneless chicken chunks marinated overnight in dairy cream, cheese, green cardamon dust, and roasted cashew paste.",
+    image: "/images/malai_tikka.png",
     tag: "Tandoor Special"
   },
   {
@@ -26,7 +26,7 @@ const signatureDishes = [
     price: "₹355",
     category: "Behind the Wicket Starter",
     description: "Crunchy sweet corn kernels battered and wok-tossed in a high flame with fresh scallions, crushed black pepper, sea salt, and green chillies.",
-    image: "/stadium_lounge_bg.png",
+    image: "/images/corn_salt_pepper.png",
     tag: "Asian Best Seller"
   },
   {
@@ -34,7 +34,7 @@ const signatureDishes = [
     price: "₹175",
     category: "Drinks Break Cooler",
     description: "Thick, creamy clay-cup lassi sweet blended with pure organic saffron strands, cardamon seeds, and topped with a heavy load of sliced almonds and pistachios.",
-    image: "/stadium_lounge_bg.png",
+    image: "/images/mewa_lassi.png",
     tag: "Classic Dessert"
   }
 ];

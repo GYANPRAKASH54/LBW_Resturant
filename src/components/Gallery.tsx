@@ -16,7 +16,7 @@ const galleryItems = [
     id: 2,
     title: "Clay Oven Grilled Chicken Tandoori",
     category: "Signature Dish",
-    image: "/stadium_lounge_bg.png" // Using the premium visual we generated
+    image: "/images/malai_tikka.png"
   },
   {
     id: 3,
@@ -28,13 +28,13 @@ const galleryItems = [
     id: 4,
     title: "Aromatic Handi Matka Biryani",
     category: "Signature Dish",
-    image: "/stadium_lounge_bg.png"
+    image: "/images/mutton_handi.png"
   },
   {
     id: 5,
     title: "Premium Mint Mojitos & Coolers",
     category: "Beverage",
-    image: "/stadium_lounge_bg.png"
+    image: "/images/mewa_lassi.png"
   },
   {
     id: 6,
