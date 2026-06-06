@@ -1,65 +1,234 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect } from "react";
+import { Star, Phone, Calendar, ArrowDown, Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import Loader from "@/components/Loader";
+import Header from "@/components/Header";
+import HeroCanvas from "@/components/HeroCanvas";
+import About from "@/components/About";
+import SignatureDishes from "@/components/SignatureDishes";
+import Experience from "@/components/Experience";
+import MenuSection from "@/components/MenuSection";
+import Reviews from "@/components/Reviews";
+import Gallery from "@/components/Gallery";
+import Location from "@/components/Location";
+import Reservation from "@/components/Reservation";
+import Footer from "@/components/Footer";
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Smooth scroll handler for hero CTA buttons
+  const handleScrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const element = document.querySelector(href);
+    if (element) {
+      const offset = 80; // height of sticky nav
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      <AnimatePresence mode="wait">
+        {isLoading && <Loader onComplete={() => setIsLoading(false)} />}
+      </AnimatePresence>
+
+      {!isLoading && (
+        <div className="flex flex-col min-h-screen bg-[#070707]">
+          {/* Header Navigation */}
+          <Header />
+
+          {/* 3D Hero Section */}
+          <section id="home" className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+            {/* Three.js Interactive Background */}
+            <HeroCanvas />
+
+            {/* Dark Vignette Overlay for readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#070707] via-[#070707]/35 to-black/75 pointer-events-none" />
+
+            <div className="max-w-7xl mx-auto px-6 md:px-12 w-full relative z-10 py-20 text-center lg:text-left">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                {/* Hero Text Info */}
+                <div className="lg:col-span-8 space-y-8">
+                  {/* Slogan Badge */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="inline-flex items-center space-x-2 bg-[#C5A880]/10 border border-[#C5A880]/30 px-4 py-2 rounded-none max-w-max mx-auto lg:mx-0"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-[#C5A880]" />
+                    <span className="text-[10px] font-bold tracking-[0.25em] text-[#C5A880] uppercase">
+                      Urja Stadium • Patna
+                    </span>
+                  </motion.div>
+
+                  {/* Main Headings */}
+                  <div className="space-y-4">
+                    <motion.h1
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.8, delay: 0.4 }}
+                      className="text-4xl md:text-7xl font-serif font-bold text-white tracking-wide leading-tight"
+                    >
+                      Lounge Before <br />
+                      <span className="gradient-text-gold">Wicket</span>
+                    </motion.h1>
+                    
+                    <motion.p
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.8, delay: 0.6 }}
+                      className="text-white/70 max-w-xl text-sm md:text-lg leading-relaxed font-light mx-auto lg:mx-0"
+                    >
+                      Patna's ultimate luxury multi-cuisine sports lounge and dining room. Experience live match screening on giant projection overlays with world-class clay grills.
+                    </motion.p>
+                  </div>
+
+                  {/* Rating Showcase Trust badge */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.8 }}
+                    className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
+                  >
+                    <div className="flex items-center space-x-1 text-[#FFBF00]">
+                      {[...Array(4)].map((_, i) => (
+                        <Star key={i} className="w-5 h-5 fill-current" />
+                      ))}
+                      <Star className="w-5 h-5 text-white/20" />
+                    </div>
+                    <div className="text-xs text-white/50 tracking-wider font-light">
+                      <span className="text-white font-semibold">4.0 Stars</span> rating based on{" "}
+                      <span className="text-white font-semibold">3,285+ Google Reviews</span>
+                    </div>
+                  </motion.div>
+
+                  {/* CTA Buttons */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 1 }}
+                    className="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start"
+                  >
+                    <a
+                      href="tel:+919117269999"
+                      className="w-full sm:w-auto glow-btn flex items-center justify-center space-x-2 bg-[#C5A880] text-[#070707] font-bold text-xs uppercase tracking-widest px-8 py-4.5 transition-all"
+                    >
+                      <Phone className="w-4 h-4" />
+                      <span>Call: 9117269999</span>
+                    </a>
+                    
+                    <a
+                      href="#reservation"
+                      onClick={(e) => handleScrollToSection(e, "#reservation")}
+                      className="w-full sm:w-auto flex items-center justify-center space-x-2 bg-white/5 hover:bg-white/10 text-white font-bold text-xs uppercase tracking-widest px-8 py-4.5 border border-white/15 transition-all"
+                    >
+                      <Calendar className="w-4 h-4 text-[#C5A880]" />
+                      <span>Reserve Table</span>
+                    </a>
+
+                    <a
+                      href="#menu"
+                      onClick={(e) => handleScrollToSection(e, "#menu")}
+                      className="w-full sm:w-auto text-center text-xs uppercase tracking-widest text-[#C5A880] hover:text-white transition-colors py-4 px-6 font-bold"
+                    >
+                      Explore Menu
+                    </a>
+                  </motion.div>
+                </div>
+
+                {/* Right Area (Glass Cards displaying highlights in 3D-like float) */}
+                <div className="lg:col-span-4 hidden lg:block relative h-[450px]">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9, x: 20 }}
+                    animate={{ opacity: 1, scale: 1, x: 0 }}
+                    transition={{ duration: 0.8, delay: 0.8 }}
+                    className="absolute top-10 right-0 w-80 glass-card p-6 border border-white/10 shadow-2xl animate-float-slow"
+                  >
+                    <div className="flex items-center space-x-3 mb-3">
+                      <div className="w-8 h-8 rounded-full bg-[#C5A880]/15 flex items-center justify-center text-[#C5A880]">
+                        <Star className="w-4.5 h-4.5 fill-current" />
+                      </div>
+                      <h4 className="text-white font-serif font-bold text-sm">Patna's Premium Ground</h4>
+                    </div>
+                    <p className="text-white/50 text-[11px] leading-relaxed font-light">
+                      Direct glass-panel views onto the lush grass outfield of Urja Stadium, creating an unparalleled sports bar dining view.
+                    </p>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9, x: 20 }}
+                    animate={{ opacity: 1, scale: 1, x: 0 }}
+                    transition={{ duration: 0.8, delay: 1.1 }}
+                    className="absolute bottom-10 left-0 w-80 glass-card p-6 border border-white/10 shadow-2xl glow-gold"
+                  >
+                    <div className="flex items-center space-x-3 mb-3">
+                      <div className="w-8 h-8 rounded-full bg-[#3a4f8c]/20 flex items-center justify-center text-[#C5A880]">
+                        <Star className="w-4.5 h-4.5 fill-current" />
+                      </div>
+                      <h4 className="text-white font-serif font-bold text-sm">Authentic Clay Oven</h4>
+                    </div>
+                    <p className="text-white/50 text-[11px] leading-relaxed font-light">
+                      Specialized clay-grill tandoors cooking spicy kebabs and aromatic handi mutton, prepared by top-tier Indian chefs.
+                    </p>
+                  </motion.div>
+                </div>
+
+              </div>
+            </div>
+
+            {/* Scroll Down Indicator */}
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-white/30 space-y-2 pointer-events-none">
+              <span className="text-[8px] uppercase tracking-[0.4em] font-semibold text-white/40">Scroll Field</span>
+              <motion.div
+                animate={{ y: [0, 6, 0] }}
+                transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+              >
+                <ArrowDown className="w-4 h-4 text-[#C5A880]" />
+              </motion.div>
+            </div>
+          </section>
+
+          {/* About Us Section */}
+          <About />
+
+          {/* Signature Dishes */}
+          <SignatureDishes />
+
+          {/* Experience Section */}
+          <Experience />
+
+          {/* Digital Menu Section */}
+          <MenuSection />
+
+          {/* Testimonials */}
+          <Reviews />
+
+          {/* Photo Gallery */}
+          <Gallery />
+
+          {/* Location & Directions */}
+          <Location />
+
+          {/* Reservation Booking Form */}
+          <Reservation />
+
+          {/* Footer details */}
+          <Footer />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      )}
+    </>
   );
 }
