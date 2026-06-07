@@ -1,18 +1,25 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, Sparkles, UtensilsCrossed } from "lucide-react";
+import { Search, Sparkles, UtensilsCrossed, Plus, ShoppingBag } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { menuCategories, MenuItem } from "@/data/menuData";
+import { useApp } from "@/context/AppContext";
 
 export default function MenuSection() {
-  const [activeTab, setActiveTab] = useState(menuCategories[0].id);
+  const { menu, activeTable, addDineInCart, addDeliveryCart } = useApp();
+  const [activeTab, setActiveTab] = useState(menu[0].id);
   const [searchQuery, setSearchQuery] = useState("");
   const [dietFilter, setDietFilter] = useState<"all" | "veg" | "non-veg">("all");
+  const [notification, setNotification] = useState<string | null>(null);
+
+  const triggerNotify = (msg: string) => {
+    setNotification(msg);
+    setTimeout(() => setNotification(null), 2000);
+  };
 
   const activeCategory = useMemo(() => {
-    return menuCategories.find((cat) => cat.id === activeTab);
-  }, [activeTab]);
+    return menu.find((cat) => cat.id === activeTab);
+  }, [activeTab, menu]);
 
   // Filter items globally or by active category
   const filteredItems = useMemo(() => {
@@ -39,6 +46,20 @@ export default function MenuSection() {
     <section id="menu" className="py-24 bg-[#070707] relative">
       {/* Background radial glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#C5A880]/3 rounded-full blur-[150px] pointer-events-none" />
+
+      {/* Floating notification alert */}
+      <AnimatePresence>
+        {notification && (
+          <motion.div
+            initial={{ opacity: 0, y: 30, x: "-50%" }}
+            animate={{ opacity: 1, y: 0, x: "-50%" }}
+            exit={{ opacity: 0, y: 30, x: "-50%" }}
+            className="fixed bottom-12 left-1/2 -translate-x-1/2 z-50 bg-[#C5A880] text-[#070707] text-xs uppercase tracking-widest font-bold px-6 py-3 shadow-2xl flex items-center space-x-2"
+          >
+            <span>{notification}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         
@@ -112,7 +133,7 @@ export default function MenuSection() {
 
         {/* Category Horizontal Scroll Tabs */}
         <div className="overflow-x-auto scrollbar-none pb-4 mb-12 border-b border-white/5 flex space-x-2 scroll-smooth">
-          {menuCategories.map((cat) => (
+          {menu.map((cat) => (
             <button
               key={cat.id}
               onClick={() => {
@@ -166,7 +187,7 @@ export default function MenuSection() {
                   </div>
                 )}
 
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {/* Top line: Name & Diet Dot */}
                   <div className="flex justify-between items-start">
                     <div className="flex items-center space-x-3">
@@ -197,6 +218,33 @@ export default function MenuSection() {
                   <p className="text-white/50 text-xs leading-relaxed font-light">
                     {item.description}
                   </p>
+
+                  {/* Quick Cart Actions */}
+                  <div className="pt-2 flex justify-end">
+                    {activeTable !== null ? (
+                      <button
+                        onClick={() => {
+                          addDineInCart(item);
+                          triggerNotify(`Added ${item.name} to Table #${activeTable} Order`);
+                        }}
+                        className="flex items-center space-x-1 px-3 py-1.5 bg-white/5 border border-white/10 hover:border-[#C5A880] hover:text-[#C5A880] text-[10px] uppercase font-bold tracking-widest text-white transition-colors"
+                      >
+                        <Plus className="w-3 h-3 text-[#C5A880]" />
+                        <span>Add to Table</span>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          addDeliveryCart(item);
+                          triggerNotify(`Added ${item.name} to Delivery Basket`);
+                        }}
+                        className="flex items-center space-x-1.5 px-3 py-1.5 bg-white/5 border border-white/10 hover:border-[#C5A880] hover:text-[#C5A880] text-[10px] uppercase font-bold tracking-widest text-white transition-colors"
+                      >
+                        <ShoppingBag className="w-3.5 h-3.5 text-[#C5A880]" />
+                        <span>Order Delivery</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
               </motion.div>
             ))}

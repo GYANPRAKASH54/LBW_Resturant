@@ -1,22 +1,24 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X, Phone, Calendar } from "lucide-react";
+import { Menu, X, Phone, Calendar, Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useApp } from "@/context/AppContext";
 
 const navLinks = [
   { name: "Home", href: "#home" },
-  { name: "About Us", href: "#about" },
-  { name: "Experience", href: "#experience" },
-  { name: "Digital Menu", href: "#menu" },
-  { name: "Reviews", href: "#reviews" },
-  { name: "Gallery", href: "#gallery" },
-  { name: "Location", href: "#location" }
+  { name: "About", href: "#about" },
+  { name: "Dine-In", href: "#dine-in" },
+  { name: "Delivery", href: "#delivery" },
+  { name: "Rewards", href: "#loyalty" },
+  { name: "Admin", href: "#admin" },
+  { name: "Reviews", href: "#reviews" }
 ];
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { theme, toggleTheme, activeTable } = useApp();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -53,7 +55,7 @@ export default function Header() {
       <header
         className={`fixed top-0 left-0 w-full z-40 transition-all duration-500 ${
           isScrolled
-            ? "glass-nav py-4 shadow-lg shadow-black/40"
+            ? "glass-nav py-4 shadow-lg shadow-black/20"
             : "bg-transparent py-6"
         }`}
       >
@@ -73,13 +75,13 @@ export default function Header() {
           </a>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-6">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
                 onClick={(e) => handleLinkClick(e, link.href)}
-                className="text-xs uppercase tracking-widest text-white/70 hover:text-[#C5A880] hover:glow-text-gold transition-all duration-300 font-medium"
+                className="text-xs uppercase tracking-widest text-white/80 hover:text-[#C5A880] hover:glow-text-gold transition-all duration-300 font-medium"
               >
                 {link.name}
               </a>
@@ -88,6 +90,24 @@ export default function Header() {
 
           {/* Desktop CTA Actions */}
           <div className="hidden lg:flex items-center space-x-4">
+            
+            {/* Active Table indicator */}
+            {activeTable !== null && (
+              <div className="flex items-center space-x-2 border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-[10px] uppercase font-bold tracking-wider text-emerald-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Table #{activeTable}</span>
+              </div>
+            )}
+
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 border border-white/10 text-white/70 hover:text-[#C5A880] transition-colors focus:outline-none"
+              aria-label="Toggle Theme"
+            >
+              {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
+
             <a
               href="tel:+919117269999"
               className="flex items-center space-x-2 text-xs uppercase tracking-widest text-[#C5A880] hover:text-white transition-colors duration-300 px-3 py-2 font-semibold"
@@ -95,24 +115,43 @@ export default function Header() {
               <Phone className="w-4.5 h-4.5" />
               <span>9117269999</span>
             </a>
+            
             <a
               href="#reservation"
               onClick={(e) => handleLinkClick(e, "#reservation")}
               className="glow-btn flex items-center space-x-2 text-xs uppercase tracking-widest bg-gradient-to-r from-[#8C6D3E] via-[#C5A880] to-[#8C6D3E] text-[#070707] font-bold px-5 py-3 rounded-none border border-[#C5A880]/30 transition-all duration-300"
             >
               <Calendar className="w-4 h-4" />
-              <span>Reserve Table</span>
+              <span>Book Table</span>
             </a>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden text-white hover:text-[#C5A880] transition-colors focus:outline-none"
-            aria-label="Toggle Menu"
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          {/* Mobile Actions (Menu & Theme) */}
+          <div className="lg:hidden flex items-center space-x-4">
+            
+            {/* Active Table indicator Mobile */}
+            {activeTable !== null && (
+              <div className="border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[9px] uppercase font-bold tracking-wider text-emerald-400">
+                <span>T#{activeTable}</span>
+              </div>
+            )}
+
+            <button
+              onClick={toggleTheme}
+              className="p-1.5 border border-white/10 text-white"
+              aria-label="Toggle Theme"
+            >
+              {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
+
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-white hover:text-[#C5A880] transition-colors focus:outline-none"
+              aria-label="Toggle Menu"
+            >
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -126,13 +165,13 @@ export default function Header() {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="fixed inset-0 z-30 lg:hidden flex flex-col bg-[#070707]/98 backdrop-blur-xl pt-24 pb-8 px-8 border-b border-white/5"
           >
-            <div className="flex flex-col space-y-6 items-center text-center my-auto">
+            <div className="flex flex-col space-y-5 items-center text-center my-auto">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
                   onClick={(e) => handleLinkClick(e, link.href)}
-                  className="text-lg uppercase tracking-[0.2em] text-white/80 hover:text-[#C5A880] transition-colors duration-300 font-serif"
+                  className="text-base uppercase tracking-[0.2em] text-white/80 hover:text-[#C5A880] transition-colors duration-300 font-serif"
                 >
                   {link.name}
                 </a>
@@ -145,14 +184,14 @@ export default function Header() {
                 className="flex items-center space-x-2 text-sm uppercase tracking-widest text-[#C5A880]"
               >
                 <Phone className="w-4 h-4" />
-                <span>+91 9117269999</span>
+                <span>+91 91172 69999</span>
               </a>
               <a
                 href="#reservation"
                 onClick={(e) => handleLinkClick(e, "#reservation")}
                 className="w-full text-center text-sm uppercase tracking-widest bg-gradient-to-r from-[#8C6D3E] via-[#C5A880] to-[#8C6D3E] text-[#070707] font-bold py-4 rounded-none border border-[#C5A880]/30"
               >
-                Reserve Table
+                Book Table
               </a>
             </div>
           </motion.div>

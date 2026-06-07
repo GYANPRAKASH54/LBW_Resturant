@@ -1,17 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Star, Phone, Calendar, ArrowDown, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { AppProvider } from "@/context/AppContext";
 import Loader from "@/components/Loader";
 import Header from "@/components/Header";
 import HeroCanvas from "@/components/HeroCanvas";
 import About from "@/components/About";
 import SignatureDishes from "@/components/SignatureDishes";
+import CinematicFood from "@/components/CinematicFood";
 import Experience from "@/components/Experience";
+import DineInSection from "@/components/DineInSection";
+import DeliverySection from "@/components/DeliverySection";
+import LoyaltySection from "@/components/LoyaltySection";
 import MenuSection from "@/components/MenuSection";
 import Reviews from "@/components/Reviews";
 import Gallery from "@/components/Gallery";
+import AdminDashboard from "@/components/AdminDashboard";
 import Location from "@/components/Location";
 import Reservation from "@/components/Reservation";
 import Footer from "@/components/Footer";
@@ -38,13 +44,13 @@ export default function Home() {
   };
 
   return (
-    <>
+    <AppProvider>
       <AnimatePresence mode="wait">
         {isLoading && <Loader onComplete={() => setIsLoading(false)} />}
       </AnimatePresence>
 
       {!isLoading && (
-        <div className="flex flex-col min-h-screen bg-[#070707]">
+        <div className="flex flex-col min-h-screen bg-background text-foreground transition-colors duration-500">
           {/* Header Navigation */}
           <Header />
 
@@ -155,7 +161,7 @@ export default function Home() {
                     initial={{ opacity: 0, scale: 0.9, x: 20 }}
                     animate={{ opacity: 1, scale: 1, x: 0 }}
                     transition={{ duration: 0.8, delay: 0.8 }}
-                    className="absolute top-10 right-0 w-80 glass-card p-6 border border-white/10 shadow-2xl animate-float-slow"
+                    className="absolute top-10 right-0 w-80 glass-card p-6 border border-white/10 shadow-2xl animate-float-slow bg-[#121212]/70"
                   >
                     <div className="flex items-center space-x-3 mb-3">
                       <div className="w-8 h-8 rounded-full bg-[#C5A880]/15 flex items-center justify-center text-[#C5A880]">
@@ -172,7 +178,7 @@ export default function Home() {
                     initial={{ opacity: 0, scale: 0.9, x: 20 }}
                     animate={{ opacity: 1, scale: 1, x: 0 }}
                     transition={{ duration: 0.8, delay: 1.1 }}
-                    className="absolute bottom-10 left-0 w-80 glass-card p-6 border border-white/10 shadow-2xl glow-gold"
+                    className="absolute bottom-10 left-0 w-80 glass-card p-6 border border-white/10 shadow-2xl glow-gold bg-[#121212]/70"
                   >
                     <div className="flex items-center space-x-3 mb-3">
                       <div className="w-8 h-8 rounded-full bg-[#3a4f8c]/20 flex items-center justify-center text-[#C5A880]">
@@ -207,8 +213,20 @@ export default function Home() {
           {/* Signature Dishes */}
           <SignatureDishes />
 
+          {/* Cinematic Food Steam Animation */}
+          <CinematicFood />
+
           {/* Experience Section */}
           <Experience />
+
+          {/* Dine-In QR Table Management */}
+          <DineInSection />
+
+          {/* Home Delivery Ordering & GPS Tracker */}
+          <DeliverySection />
+
+          {/* Loyalty & Scratch Card Gamification */}
+          <LoyaltySection />
 
           {/* Digital Menu Section */}
           <MenuSection />
@@ -218,6 +236,9 @@ export default function Home() {
 
           {/* Photo Gallery */}
           <Gallery />
+
+          {/* Admin Dashboard Controls */}
+          <AdminDashboard />
 
           {/* Location & Directions */}
           <Location />
@@ -229,6 +250,6 @@ export default function Home() {
           <Footer />
         </div>
       )}
-    </>
+    </AppProvider>
   );
 }
